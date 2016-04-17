@@ -1,4 +1,4 @@
-(defproject com.github.kyleburton/repl-from-java "1.0.1"
+(defproject com.github.kyleburton/repl-from-java "1.0.2"
   :description "CIDER + Nepl in a single dependency."
   :url "https://github.com/kyleburton/sandbox/tree/master/examples/clojure/repl-from-java"
   :license {:name "Eclipse Public License"

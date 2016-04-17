@@ -67,7 +67,7 @@ public class Repl {
     }
 
     public static void launchCiderNRepl(String bindAddress, int port) {
-	LOG.info(String.format("    ... cider nrepl"));
+	LOG.info(String.format("    ... starting cider nrepl: %s:%s", bindAddress, port));
 	cljRequire("clojure.tools.nrepl.server");
 	cljRequire("cider.nrepl");
 	server = cljEval( "(clojure.tools.nrepl.server/start-server"
@@ -81,7 +81,7 @@ public class Repl {
     }
 
     public static void launchNRepl(String bindAddress, int port) {
-	LOG.info(String.format("    ... stanard nrepl"));
+	LOG.info(String.format("    ... starting standard nrepl: %s:%s", bindAddress, port));
 	cljRequire("clojure.tools.nrepl.server");
 	server = cljEval( "(clojure.tools.nrepl.server/start-server"
 			  + "\n  :port " + port

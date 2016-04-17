@@ -35,6 +35,26 @@ Leiningen `project.clj`:
   ])
 ```
 
+Launching the repl from java:
+
+```java
+import com.github.kyleburton.Repl;
+public class MyClass {
+
+  public void someFunction() {
+    Repl.launchCiderNRepl("127.0.0.1", 4123);
+
+    // or more simply (which defaults to the arguments above):
+
+    Repl.launchCiderNRepl();
+  }
+
+}
+```
+
+Then in Emacs/CIDER, run `M-x cider-connect` and use the bind address and port
+you specified (127.0.0.1 and 4123).
+
 ## License
 
 Copyright © 2016 Kyle Burton <kyle.burton@gmail.com>

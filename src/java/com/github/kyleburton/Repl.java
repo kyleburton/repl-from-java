@@ -13,95 +13,95 @@ public class Repl {
     public static Object server = null;
 
     public static int getReplPort() {
-	// pull from System.properties if set
-	if (null != System.getProperty("DEFAULT_REPL_PORT")) {
-	    return Integer.parseInt(System.getProperty("DEFAULT_REPL_PORT"));
-	}
+        // pull from System.properties if set
+        if (null != System.getProperty("DEFAULT_REPL_PORT")) {
+            return Integer.parseInt(System.getProperty("DEFAULT_REPL_PORT"));
+        }
 
-	// pull from env var if set
-	if (null != System.getenv("DEFAULT_REPL_PORT")) {
-	    return Integer.parseInt(System.getenv("DEFAULT_REPL_PORT"));
-	}
+        // pull from env var if set
+        if (null != System.getenv("DEFAULT_REPL_PORT")) {
+            return Integer.parseInt(System.getenv("DEFAULT_REPL_PORT"));
+        }
 
-	// fallback to hard-coded default
-	return DEFAULT_REPL_PORT;
+        // fallback to hard-coded default
+        return DEFAULT_REPL_PORT;
     }
 
 
     public static String getBindAddress() {
-	// pull from System.properties if set
-	if (null != System.getProperty("DEFAULT_REPL_PORT")) {
-	    return System.getProperty("DEFAULT_REPL_PORT");
-	}
+        // pull from System.properties if set
+        if (null != System.getProperty("DEFAULT_REPL_PORT")) {
+            return System.getProperty("DEFAULT_REPL_PORT");
+        }
 
-	// pull from env var if set
-	if (null != System.getenv("DEFAULT_REPL_PORT")) {
-	    return System.getenv("DEFAULT_REPL_PORT");
-	}
-	return "127.0.0.1";
+        // pull from env var if set
+        if (null != System.getenv("DEFAULT_REPL_PORT")) {
+            return System.getenv("DEFAULT_REPL_PORT");
+        }
+        return "127.0.0.1";
     }
 
     public static boolean doLaunchCiderNRepl() {
-	if (null != System.getProperty("NREPL_TYPE") 
-	    && "cider".equals(System.getProperty("NREPL_TYPE") )) {
-	    return true;
-	}
+        if (null != System.getProperty("NREPL_TYPE")
+            && "cider".equals(System.getProperty("NREPL_TYPE") )) {
+            return true;
+        }
 
-	if (null != System.getenv("NREPL_TYPE") 
-	    && "cider".equals(System.getenv("NREPL_TYPE") )) {
-	    return true;
-	}
+        if (null != System.getenv("NREPL_TYPE")
+            && "cider".equals(System.getenv("NREPL_TYPE") )) {
+            return true;
+        }
 
-	return true;
+        return true;
     }
 
     public static void cljRequire(String ns) {
-	IFn require = Clojure.var("clojure.core","require");
-	LOG.info(String.format("    ... clojure.core/require %s", ns));
-	require.invoke(Clojure.read(ns));
+        IFn require = Clojure.var("clojure.core","require");
+        LOG.info(String.format("    ... clojure.core/require %s", ns));
+        require.invoke(Clojure.read(ns));
     }
 
     public static Object cljEval(String code) {
-	IFn eval = Clojure.var("clojure.core", "eval");
-	return eval.invoke(Clojure.read(code));
+        IFn eval = Clojure.var("clojure.core", "eval");
+        return eval.invoke(Clojure.read(code));
     }
 
     public static void launchCiderNRepl(String bindAddress, int port) {
-	LOG.info(String.format("    ... starting cider nrepl: %s:%s", bindAddress, port));
-	cljRequire("clojure.tools.nrepl.server");
-	cljRequire("cider.nrepl");
-	server = cljEval( "(clojure.tools.nrepl.server/start-server"
-			  + "\n  :port " + port
-			  + "\n  :bind \"" + bindAddress + "\""
-			  + "\n  :handler cider.nrepl/cider-nrepl-handler)");
+        LOG.info(String.format("    ... starting cider nrepl: %s:%s", bindAddress, port));
+        cljRequire("clojure.tools.nrepl.server");
+        cljRequire("cider.nrepl");
+        server = cljEval( "(clojure.tools.nrepl.server/start-server"
+                          + "\n  :port " + port
+                          + "\n  :bind \"" + bindAddress + "\""
+                          + "\n  :handler cider.nrepl/cider-nrepl-handler)");
     }
 
     public static void launchCiderNRepl() {
-	launchCiderNRepl(DEFAULT_REPL_BIND_ADDRESS, DEFAULT_REPL_PORT);
+        launchCiderNRepl(DEFAULT_REPL_BIND_ADDRESS, DEFAULT_REPL_PORT);
     }
 
     public static void launchNRepl(String bindAddress, int port) {
-	LOG.info(String.format("    ... starting standard nrepl: %s:%s", bindAddress, port));
-	cljRequire("clojure.tools.nrepl.server");
-	server = cljEval( "(clojure.tools.nrepl.server/start-server"
-			  + "\n  :port " + port
-			  + "\n  :bind \"" + bindAddress + "\")");
+        LOG.info(String.format("    ... starting standard nrepl: %s:%s", bindAddress, port));
+        cljRequire("clojure.tools.nrepl.server");
+        server = cljEval( "(clojure.tools.nrepl.server/start-server"
+                          + "\n  :port " + port
+                          + "\n  :bind \"" + bindAddress + "\")");
     }
 
     public static void launchNRepl() {
-	launchNRepl(DEFAULT_REPL_BIND_ADDRESS, DEFAULT_REPL_PORT);
+        launchNRepl(DEFAULT_REPL_BIND_ADDRESS, DEFAULT_REPL_PORT);
     }
 
     public static void main (String [] args) {
-	LOG.info(String.format("Launching repl on %s:%s", getBindAddress(), getReplPort()));
-	if (doLaunchCiderNRepl()) {
-	    launchCiderNRepl(getBindAddress(), getReplPort());
-	    LOG.info(String.format("server listening on background thread: %s", server));
-	    return;
-	}
+        LOG.info(String.format("Launching repl on %s:%s", getBindAddress(), getReplPort()));
+        if (doLaunchCiderNRepl()) {
+            launchCiderNRepl(getBindAddress(), getReplPort());
+            LOG.info(String.format("server listening on background thread: %s", server));
+            return;
+        }
 
-	launchNRepl(getBindAddress(), getReplPort());
-	LOG.info(String.format("server listening on background thread"));
-	return;
+        launchNRepl(getBindAddress(), getReplPort());
+        LOG.info(String.format("server listening on background thread"));
+        return;
     }
 }

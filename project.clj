@@ -6,10 +6,8 @@
   :source-paths      ["src/clojure"]
   :java-source-paths ["src/java"]
   :main ^:skip-aot com.github.kyleburton.Repl
-  :dependencies [
-                 [org.clojure/clojure                    "1.8.0"]
-                 [org.clojure/tools.logging              "0.3.1"]
-                 [org.clojure/tools.nrepl                "0.2.12"]
-                 [cider/cider-nrepl                      "0.10.2"]
-                 [ch.qos.logback/logback-classic         "1.0.13"]
-                 ])
+  :dependencies [[org.clojure/clojure                    "1.10.1"]
+                 [org.clojure/tools.logging              "1.2.1"]
+                 [org.clojure/tools.nrepl                "0.2.13"]
+                 [cider/cider-nrepl                      "0.21.1"]
+                 [ch.qos.logback/logback-classic         "1.2.3"]])
